@@ -2,6 +2,7 @@ package br.com.caelum.ingresso.controller;
 
 import br.com.caelum.ingresso.dao.FilmeDao;
 import br.com.caelum.ingresso.model.Filme;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by nando on 03/03/17.
@@ -71,5 +76,28 @@ public class FilmeController {
     public void delete(@PathVariable("id") Integer id){
         filmeDao.delete(id);
     }
+    
+    public static void main(String[] args) {
+		
+    	List<Filme> filme = new ArrayList<>();
+    	
+		Filme f = new Filme();
+		Filme f2 = new Filme();
+		Filme f3 = new Filme();
+    	
+    	f.setNome("A gala do pato");
+    	f2.setNome("Teste, o filme");
+    	f3.setNome("A coisa");
+    	
+    	filme.add(f);
+    	filme.add(f2);
+    	filme.add(f3);
+
+//    	filme.removeIf(item -> item.getNome().startsWith("A"));
+//    	filme.forEach(item -> System.out.println(item.getNome()));
+    	
+    	List<String> collect = filme.stream().map(item -> item.getNome()).collect(Collectors.toList());
+    	collect.forEach(item -> System.out.println(item));
+	}
 
 }
