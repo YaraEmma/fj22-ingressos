@@ -1,7 +1,9 @@
 package br.com.caelum.ingresso.controller;
 
 import br.com.caelum.ingresso.dao.FilmeDao;
+import br.com.caelum.ingresso.dao.SessaoDao;
 import br.com.caelum.ingresso.model.Filme;
+import br.com.caelum.ingresso.model.Sessao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@ public class FilmeController {
 
     @Autowired
     private FilmeDao filmeDao;
+    
+    @Autowired
+    private SessaoDao sessaoDao;
 
 
     @GetMapping({"/admin/filme", "/admin/filme/{id}"})
@@ -58,7 +63,6 @@ public class FilmeController {
         return view;
     }
 
-
     @GetMapping(value="/admin/filmes")
     public ModelAndView lista(){
 
@@ -68,7 +72,27 @@ public class FilmeController {
 
         return modelAndView;
     }
+    
+    @GetMapping(value="/filme/{id}/detalhe")
+    public ModelAndView detalhes(@PathVariable("id") Integer id){
 
+        ModelAndView modelAndView = new ModelAndView("filme/detalhe");
+        
+        Filme filme = filmeDao.findOne(id);
+        List<Sessao> sessoes = sessaoDao.buscaSessoesDoFilme(filme);
+
+        modelAndView.addObject("sessoes", sessoes);
+        return modelAndView;
+    }
+    
+    @GetMapping("/filme/em-cartaz")
+    public ModelAndView emCartaz(){
+        ModelAndView modelAndView = new ModelAndView("filme/em-cartaz");
+
+        modelAndView.addObject("filmes", filmeDao.findAll());
+
+        return modelAndView;
+    }
 
     @DeleteMapping("/admin/filme/{id}")
     @ResponseBody
@@ -76,28 +100,4 @@ public class FilmeController {
     public void delete(@PathVariable("id") Integer id){
         filmeDao.delete(id);
     }
-    
-    public static void main(String[] args) {
-		
-    	List<Filme> filme = new ArrayList<>();
-    	
-		Filme f = new Filme();
-		Filme f2 = new Filme();
-		Filme f3 = new Filme();
-    	
-    	f.setNome("A gala do pato");
-    	f2.setNome("Teste, o filme");
-    	f3.setNome("A coisa");
-    	
-    	filme.add(f);
-    	filme.add(f2);
-    	filme.add(f3);
-
-//    	filme.removeIf(item -> item.getNome().startsWith("A"));
-//    	filme.forEach(item -> System.out.println(item.getNome()));
-    	
-    	List<String> collect = filme.stream().map(item -> item.getNome()).collect(Collectors.toList());
-    	collect.forEach(item -> System.out.println(item));
-	}
-
 }
