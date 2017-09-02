@@ -14,7 +14,7 @@ import br.com.caelum.ingresso.model.Filme;
 public class ImdbClient {
 	private Logger logger = Logger.getLogger(ImdbClient.class);
 	
-	Optional<DetalhesDoFilme> request(Filme filme){
+	public Optional<DetalhesDoFilme> request(Filme filme){
 		RestTemplate client = new RestTemplate();
     	String titulo = filme.getNome().replace(" ", "+"); 
     	String url = String.format("https://imdb-fj22.herokuapp.com/imdb?title=%s", titulo);

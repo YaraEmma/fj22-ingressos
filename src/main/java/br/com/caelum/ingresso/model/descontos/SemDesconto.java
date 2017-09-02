@@ -8,5 +8,9 @@ public class SemDesconto implements Desconto {
 	public BigDecimal aplicaDesconto(BigDecimal precoOriginal) {
 		return precoOriginal;
 	}
-
+	
+	@Override
+	public String getDescricao() {
+		return "Normal";
+	}
 }
